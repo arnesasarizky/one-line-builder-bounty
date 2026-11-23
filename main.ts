@@ -19,18 +19,22 @@ function countSentences(text: string): number {
   return terminators === null ? 0 : terminators.length;
 }
 
-function main(): void {
-  const chars = [...SENTENCE];
+function validateEntry(text: string): void {
+  const chars = [...text];
   if (chars.length < 1 || chars.length > 240) {
     throw new Error(`entry must be 1-240 characters, got ${chars.length}`);
   }
-  if (SENTENCE.trim() !== SENTENCE || SENTENCE.trim().length === 0) {
+  if (text.trim() !== text || text.trim().length === 0) {
     throw new Error("entry must not be only whitespace or padded");
   }
-  if (countSentences(SENTENCE) !== 1) {
-    throw new Error(`entry must be exactly one sentence, got ${countSentences(SENTENCE)}`);
+  if (countSentences(text) !== 1) {
+    throw new Error(`entry must be exactly one sentence, got ${countSentences(text)}`);
   }
+}
 
+function main(): void {
+  validateEntry(SENTENCE);
+  const chars = [...SENTENCE];
   const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "entry.txt");
